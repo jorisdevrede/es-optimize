@@ -13,10 +13,7 @@ LOG = Logger(__name__)
 
 
 def _is_ok(response, expected=200):
-    if response.status_code == expected:
-        return True
-    else:
-        return False
+    return response.status_code == expected
 
 
 class Connection:
@@ -242,10 +239,10 @@ class IndexOptimizer:
 
 if __name__ == '__main__':
     # pylint: disable=invalid-name
-    # parser = ArgumentParser(
-    #     description="Optimize the sharding of an Elasticsearch index")
-    # parser.add_argument('-i', '--index', dest='index')
-    # parser.add_argument('-u', '--url', dest='url')
+    parser = ArgumentParser(
+        description="Optimize the sharding of an Elasticsearch index")
+    parser.add_argument('-i', '--index', dest='index')
+    parser.add_argument('-u', '--url', dest='url')
     #
     # args = parser.parse_args()
     #
@@ -260,5 +257,5 @@ if __name__ == '__main__':
     #
     # con.index_delete('test_reindex')
 
-    io = IndexOptimizer('http://127.0.0.1:9200')
-    io.index_optimize_shards('test')
+    # io = IndexOptimizer('http://127.0.0.1:9200')
+    # io.index_optimize_shards('test')

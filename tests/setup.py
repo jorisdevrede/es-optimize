@@ -21,7 +21,7 @@ if created.status_code == 200:
 
         response = requests.post('http://127.0.0.1:9200/test/mydocument', data=json.dumps(data))
         if response.status_code != 201:
-            print(str(response.status_code) + " " + response.text )
+            print(str(response.status_code) + " " + response.text)
 
         if i % 1000 == 0:
             print('documents added: {}'.format(i))
