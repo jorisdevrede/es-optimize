@@ -1,6 +1,5 @@
 """Optimizes Elasticsearch indices"""
 
-import json
 import sys
 import uuid
 
@@ -10,10 +9,6 @@ import requests
 
 StreamHandler(sys.stdout).push_application()
 LOG = Logger(__name__)
-
-
-def _is_ok(response, expected=200):
-    return response.status_code == expected
 
 
 class Connection:
@@ -36,7 +31,7 @@ class Connection:
             {operation: {'index': index, 'alias': alias}}
         ]}
         response = requests.post(self._baseurl + '/_aliases',
-                                 data=json.dumps(data))
+                                 json=data)
         LOG.debug('alias update: {} - {}'.format(response.status_code, response.text))
 
     def cluster_get_health(self, params):
@@ -73,11 +68,11 @@ class Connection:
             params['timeout'] = timeout
 
         response = requests.put(self._baseurl + '/' + index,
-                                data=json.dumps(data),
+                                json=data,
                                 params=params)
         LOG.debug('index_create: {} - {}'.format(response.status_code, response.text))
 
-        return _is_ok(response)
+        return response.ok
 
     def index_delete(self, index):
         """Deletes an existing index
@@ -85,7 +80,7 @@ class Connection:
         response = requests.delete(self._baseurl + '/' + index)
         LOG.debug('index_delete: {} - {}'.format(response.status_code, response.text))
 
-        return _is_ok(response)
+        return response.ok
 
     def index_forcemerge(self, index):
         """Merges the segments of an index to 1"""
@@ -129,11 +124,11 @@ class Connection:
             params['timeout'] = timeout
 
         response = requests.post(self._baseurl + '/_reindex',
-                                 data=json.dumps(data),
+                                 json=data,
                                  params=params)
         LOG.debug('index_reindex: {} - {}'.format(response.status_code, response.text))
 
-        return _is_ok(response)
+        return response.ok
 
 
 class IndexOptimizer:
